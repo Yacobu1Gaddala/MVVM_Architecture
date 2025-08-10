@@ -25,7 +25,8 @@ class UserListViewModel: ObservableObject {
         
         let dummyUsers = [
             User(id: 1, name: "John Doe", email: "john@example.com"),
-            User(id: 2, name: "Jane Smith", email: "jane@example.com")
+            User(id: 2, name: "Jane Smith", email: "jane@example.com"),
+            User(id: 2, name: "Joseph Smith", email: "jane@example.com")
         ]
         
         self.users = dummyUsers
