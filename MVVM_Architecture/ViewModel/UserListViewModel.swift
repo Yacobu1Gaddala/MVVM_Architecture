@@ -31,4 +31,11 @@ class UserListViewModel: ObservableObject {
         
         self.users = dummyUsers
     }
+    
+    func addUsertoList(userName: String,And emial:String) {
+        
+        let newUser = User(id: users.count + 1, name: userName, email: emial)
+        users.append(newUser)
+        
+    }
 }
