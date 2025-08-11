@@ -6,12 +6,20 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct MVVM_ArchitectureApp: App {
     var body: some Scene {
         WindowGroup {
-            UserListView()
+           NotesListView()
         }
+        .modelContainer(for: Note.self)
+    }
+    
+    
+    private var modelContext: ModelContext {
+        let container = try! ModelContainer(for: Note.self)
+        return container.mainContext
     }
 }

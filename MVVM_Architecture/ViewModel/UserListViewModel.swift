@@ -6,36 +6,54 @@
 //
 
 import SwiftUI
+import SwiftData
 
 
-class UserListViewModel: ObservableObject {
+@MainActor
+class NotesViewModel: ObservableObject {
+    @Published var notes: [Note] = []
     
+    private var context: ModelContext
     
-    @Published var users: [User] = []
-    
-    
-    init() {
-       fetchUsers()
+    init(context: ModelContext) {
+        self.context = context
+        fetchNotes()
     }
     
     
-    // Fetch users
-    
-    func fetchUsers() {
-        
-        let dummyUsers = [
-            User(id: 1, name: "John Doe", email: "john@example.com"),
-            User(id: 2, name: "Jane Smith", email: "jane@example.com"),
-            User(id: 2, name: "Joseph Smith", email: "jane@example.com")
-        ]
-        
-        self.users = dummyUsers
+    func fetchNotes() {
+        do {
+            let descriptor = FetchDescriptor<Note>(sortBy: [SortDescriptor(\.date, order: .reverse)])
+            notes = try context.fetch(descriptor)
+        }catch {
+            print("Failed to fetch notes: \(error)")
+        }
     }
     
-    func addUsertoList(userName: String,And emial:String) {
+    
+    func addNote(title: String, content: String) {
+        let note = Note(title: title, content: content)
+        context.insert(note)
+        saveContext()
+        fetchNotes()
         
-        let newUser = User(id: users.count + 1, name: userName, email: emial)
-        users.append(newUser)
-        
+    }
+    
+    func deleteNote(at offsets: IndexSet) {
+        for index in offsets {
+            context.delete(notes[index])
+        }
+        saveContext()
+        fetchNotes()
+    }
+    
+    
+    private func saveContext() {
+        do {
+            try context.save()
+        }catch {
+            print("Failed to save context:\(error)")
+        }
     }
 }
+

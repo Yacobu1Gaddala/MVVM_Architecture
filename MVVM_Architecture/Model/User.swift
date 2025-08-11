@@ -6,11 +6,17 @@
 //
 
 import Foundation
+import SwiftData
 
-
-struct User: Identifiable {
+@Model
+class Note {
+    var title: String
+    var content: String
+    var date: Date
     
-    let id: Int
-    let name: String
-    let email: String
+    init(title: String, content: String, date: Date = Date()) {
+        self.title = title
+        self.content = content
+        self.date = date
+    }
 }
